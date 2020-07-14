@@ -2,14 +2,16 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
+using Microsoft.Extensions.Logging;
 
 namespace Cashback
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+        {            
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger(); 
+                       
             try
             {
                 logger.Debug("init main");
@@ -30,7 +32,13 @@ namespace Cashback
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseNLog();
-                });
+                    webBuilder.UseStartup<Startup>()
+                    .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
+                .UseNLog();
+        });
     }
 }

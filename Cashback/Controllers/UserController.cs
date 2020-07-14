@@ -5,6 +5,8 @@ using Cashback.Models;
 using Cashback.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Cashback.Controllers
 {
@@ -12,6 +14,13 @@ namespace Cashback.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
+
+        private readonly ILogger _logger;
+
+        public UserController(ILogger<UserController> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Lista todos os usuários cadastrados na base - Acessível apenas a Administradores.
@@ -22,12 +31,23 @@ namespace Cashback.Controllers
         [Authorize("Administrador")]
         public async Task<IActionResult> Get([FromServices] IUserRepository userRepository)
         {
-            var response = await userRepository.GetItemsAsync();
+            try
+            {
+                var response = await userRepository.GetItemsAsync();
 
-            if (response == null)
-                return NotFound();
-
-            return Ok(response);
+                if (response == null)
+                {
+                    _logger.LogInformation($"Usuário não encontrado.");
+                    return NotFound();
+                }
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) buscou pelos usuários e obteve {response.Count} resultados.");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -39,14 +59,24 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get([FromServices] IUserRepository userRepository, string id)
         {
-            var user = await userRepository.GetById(id);
-
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                var user = await userRepository.GetById(id);
 
-            return Ok(user);
+                if (user == null)
+                {
+                    _logger.LogInformation($"Usuário com id: {id} não encontrado.");
+                    return NotFound();
+                }
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) efetuou uma busca pelo usuário com ID: {id}.");
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -58,12 +88,24 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromServices] IUserService userService, [FromBody] User user)
         {
-            var response = await userService.CreateUser(user);
+            try
+            {
+                var response = await userService.CreateUser(user);
 
-            if (response.Invalid)
-                return BadRequest(response.GetProblemDetails(response));
-
-            return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+                if (response.Invalid)
+                {
+                    var foundProblem = response.GetProblemDetails(response);
+                    _logger.LogWarning($"{foundProblem}");
+                    return BadRequest(foundProblem);
+                }
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) criou uma novo usuário com a permissão: {user.Role} e email: {user.Email}.");
+                return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -75,12 +117,24 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateFirstUser([FromServices] IUserService userService, [FromBody] User user)
         {
-            var response = await userService.CreateFirstUser(user);
+            try
+            {
+                var response = await userService.CreateFirstUser(user);
 
-            if (response.Invalid)
-                return BadRequest(response.GetProblemDetails(response));
-
-            return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+                if (response.Invalid)
+                {
+                    var foundProblem = response.GetProblemDetails(response);
+                    _logger.LogWarning($"{foundProblem}");
+                    return BadRequest(foundProblem);
+                }
+                _logger.LogInformation($"Foi solicitado a criação de um novo (primeiro) usuário com o email: {user.Email}.");
+                return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -92,16 +146,26 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetMyAccumulatedCashback([FromServices] IUserService userService, [FromServices] IBoticarioService boticarioService)
         {
-            var userMail = User.Identity.Name;
-            var user = await userService.GetByEmail(userMail);
-
-            if (user != null)
+            try
             {
-                var cashback = await boticarioService.Cashback(user.Cpf);
+                var userMail = User.Identity.Name;
+                var user = await userService.GetByEmail(userMail);
 
-                return Ok(cashback);
+                if (user != null)
+                {
+                    var cashback = await boticarioService.Cashback(user.Cpf);
+                    _logger.LogInformation($"Cashback do usuário {userMail} é de: {cashback}.");
+
+                    return Ok(cashback);
+                }
+                _logger.LogInformation($"Usuário com e-mail: {userMail} não foi encontrado.");
+                return NotFound();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -113,8 +177,17 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAccumulatedCashback([FromServices] IUserService userService, [FromServices] IBoticarioService boticarioService, [FromQuery] string cpf)
         {
-            var cashback = await boticarioService.Cashback(cpf);
-            return Ok(cashback);
+            try
+            {
+                var cashback = await boticarioService.Cashback(cpf);
+                _logger.LogInformation($"o Usuário {User?.Identity.Name} realizou uma busca de cashback do usuario com o cpf: {cpf}.");
+                return Ok(cashback);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
     }

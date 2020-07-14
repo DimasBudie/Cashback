@@ -30,7 +30,10 @@ namespace Cashback.Controllers
             var response = await userService.Authenticate(model);
 
              if (response == null)
+             {
+                 _logger.LogInformation($"Usuário ({model.Email}) ou senha incorreta.");
                 return BadRequest(new { message = "Username or password is incorrect" });
+             }
             
             _logger.LogInformation($"Usuário com E-mail: {model.Email} logou na aplicação.");
             return Ok(response);

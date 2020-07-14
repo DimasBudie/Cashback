@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Cashback.Service;
 using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Cashback.Controllers
 {
@@ -15,6 +16,13 @@ namespace Cashback.Controllers
     [Route("api/[controller]")]
     public class PurchaseController : ControllerBase
     {
+        private readonly ILogger _logger;
+
+        public PurchaseController(ILogger<PurchaseController> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Retorna os Pedidos do usuário logado - Acessível apenas a Usuarios(Revendedores).
         /// </summary>
@@ -23,10 +31,18 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<Purchase>>> GetAsync([FromServices] IPurchaseService purchaseService)
-        {            
-            var items = await purchaseService.GetPurchases(User.Identity.Name);
-
-            return items.ToList();
+        {
+            try
+            {
+                var items = await purchaseService.GetPurchases(User.Identity.Name);
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) buscou pelos pedidos e obteve {items.Count()} resultados.");
+                return items.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -37,10 +53,18 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<Purchase>>> GetAll([FromServices] IPurchaseService purchaseService)
-        {            
-            var items = await purchaseService.GetPurchases();
-
-            return items.ToList();
+        {
+            try
+            {
+                var items = await purchaseService.GetPurchases();
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) executou método GetAll.");
+                return items.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
@@ -52,17 +76,28 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Purchase>> Get([FromServices] IPurchaseRepository purchaseRepository, string id)
         {
-            var purchase = await purchaseRepository.GetById(id);
-
-            if (purchase == null)
+            try
             {
-                return NotFound();
-            }
+                var purchase = await purchaseRepository.GetById(id);
 
-            return purchase;
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) efetuou uma busca pelo pedido com ID: {id}.");
+
+                if (purchase == null)
+                {
+                    _logger.LogInformation($"Pedido com ID: {id} não encontrado.");
+                    return NotFound();
+                }
+
+                return purchase;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
-/// <summary>
+        /// <summary>
         /// Cria um novo Pedido - Acessível apenas a Usuários(Revendedores).
         /// </summary>
         [HttpPost]
@@ -74,10 +109,12 @@ namespace Cashback.Controllers
             try
             {
                 await purchaseService.CreatePurchase(purchase);
+                _logger.LogInformation($"Usuário {User?.Identity.Name} criou um pedido com código: {purchase.Code}.");
                 return purchase;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -86,38 +123,57 @@ namespace Cashback.Controllers
         /// Atualiza as informações (código, Cpf, Valor, Status[Optional]) de um Pedido - Acessível a todos os Usuários Logados.
         /// </summary>
         [HttpPut("{id}")]
-        [Authorize("All")]  
+        [Authorize("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromServices]IPurchaseService purchaseService, string id, Purchase purchase)
+        public async Task<IActionResult> Update([FromServices] IPurchaseService purchaseService, string id, Purchase purchase)
         {
-            var response = await purchaseService.UpdatePurchase(id, purchase);
-
-           if (response.Invalid)
-                return BadRequest(response.GetProblemDetails(response));
-
-            return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+            try
+            {
+                var response = await purchaseService.UpdatePurchase(id, purchase);
+                if (response.Invalid)
+                {
+                    _logger.LogWarning($"{response.Notifications.FirstOrDefault().Message}");
+                    return BadRequest(response.GetProblemDetails(response));                    
+                }
+                _logger.LogInformation($"Usuário {User?.Identity.Name} atualizou o pedido com Id: {id}.");
+                return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
 
         /// <summary>
         /// Remove um Pedido da base de dados - Acessível apenas a Administradores.
         /// </summary>
         [HttpDelete("{id}")]
-        [Authorize("Administrador")]  
+        [Authorize("Administrador")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete([FromServices]IPurchaseRepository purchaseRepository, string id)
+        public async Task<IActionResult> Delete([FromServices] IPurchaseRepository purchaseRepository, string id)
         {
-            var purchase = await purchaseRepository.GetById(id);
-
-            if (purchase == null)
+            try
             {
-                return NotFound();
+                var purchase = await purchaseRepository.GetById(id);
+
+                if (purchase == null)
+                {
+                    _logger.LogInformation($"Pedido com ID: {id} não encontrado.");
+                    return NotFound();
+                }
+
+                await purchaseRepository.DeleteAsync(purchase);
+                _logger.LogInformation($"Usuário {User?.Identity.Name} Deletou o pedido com Id: {id}.");
+                return NoContent();
             }
-
-            await purchaseRepository.DeleteAsync(purchase);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
         }
     }
 }
