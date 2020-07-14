@@ -60,12 +60,19 @@ namespace Cashback.Models
             CashbackValue = Math.Round( (CashbackPercent / 100) * Value, 2 );
         }
 
-        public void UpdateValues(string code, decimal value,  string cpf)
+        public void UpdateValues(string code, decimal value,  string cpf, EnumStatus? status)
         {
             Code = code;
             Value = value;
             Cpf = cpf;
-            this.Status = GlobalSettings.Configuration["DefautCpf:Cpf"] == cpf ? EnumStatus.Approved : EnumStatus.OnChecking;
+            if(status == null)
+            {                
+                this.Status = GlobalSettings.Configuration["DefautCpf:Cpf"] == cpf ? EnumStatus.Approved : EnumStatus.OnChecking;
+            }
+            else
+            {
+                this.Status = (EnumStatus)status;
+            }
             CalcCashback();
         }
     }

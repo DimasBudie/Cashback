@@ -14,7 +14,7 @@ namespace Cashback.Middlewares
     {
         public static IServiceCollection InjectApiServices(this IServiceCollection services)
         {
-            services.AddSingleton<JwtConfigurations>();     
+            services.AddSingleton<JwtConfigurations>();
             services.AddMvc();
 
             services.AddControllers().AddNewtonsoftJson(options =>
@@ -57,11 +57,21 @@ namespace Cashback.Middlewares
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CashBack' - API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "CashBack - Boticario - API",
+                    Version = "v1",
+                    Description = "API feita com ASP .NET Core version 3.1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Dimas Budie",
+                        Email = "dimas_budie@hotmail.com"
+                    },
+                });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 4sd56pf4rmzwrujb47fre\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
@@ -89,7 +99,6 @@ namespace Cashback.Middlewares
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
                 c.IncludeXmlComments(xmlPath);
             });
         }

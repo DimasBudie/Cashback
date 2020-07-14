@@ -60,7 +60,7 @@ namespace Cashback
             
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecoleta API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "CASHBACK - BOTICARIO - API");
                 options.RoutePrefix = "swagger/ui";
             });
         }

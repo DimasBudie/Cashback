@@ -30,7 +30,7 @@ namespace Cashback.Service
         {            
             return await _purchaseRepository.GetItemsAsync();
         }
-        
+
         public async Task<Response> CreatePurchase(Purchase purchase)
         {
             var response = new Response();            
@@ -47,11 +47,8 @@ namespace Cashback.Service
             {
                 response.AddNotification("Pedido Não Localizado!");
                 return response;
-            }
-            Console.WriteLine("O que veio: " + purchase.Value);
-            Console.WriteLine("Antes do Update: " + currentPurchase.Value);
-            currentPurchase.UpdateValues(purchase.Code, purchase.Value, purchase.Cpf);
-            Console.WriteLine("Depois do Update: " + currentPurchase.Value);
+            }            
+            currentPurchase.UpdateValues(purchase.Code, purchase.Value, purchase.Cpf, purchase.Status);            
             await _purchaseRepository.UpdateAsync(currentPurchase);
             response.AddValue(currentPurchase);
 
