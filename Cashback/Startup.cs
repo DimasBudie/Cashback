@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Cashback.Middlewares;
+using NLog.Extensions.Logging;
+using NLog.Web;
+using Microsoft.Extensions.Logging;
 
 namespace Cashback
 {
@@ -32,12 +35,11 @@ namespace Cashback
             services.InjectMongoDbConnection(Configuration);
             services.InjectRepository();                   
             services.InjectApiServices();
-            services.InjectServices();
+            services.InjectServices();            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

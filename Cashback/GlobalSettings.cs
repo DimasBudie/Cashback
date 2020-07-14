@@ -1,3 +1,4 @@
+using Cashback.Repository;
 using Microsoft.Extensions.Configuration;
 
 namespace Cashback
