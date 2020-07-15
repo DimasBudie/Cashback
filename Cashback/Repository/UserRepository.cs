@@ -36,7 +36,7 @@ namespace Cashback.Repository
         public async Task<ICollection<User>> GetItemsAsync()
         {
             return await Context.GetItemsAsync(Builders<User>.Filter.Empty, 
-                "Id", "Name", "Role", "Cpf", "Email");
+                "Id", "Name", "Role", "Cpf", "Email", "CreatedAt");
         }
 
         public async Task<User> InsertAsync(User user)

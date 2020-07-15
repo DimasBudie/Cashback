@@ -1,0 +1,571 @@
+{
+	"info": {
+		"_postman_id": "aae94596-e57b-40ae-a524-eba5f737e5a5",
+		"name": "Boticário - CashBack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Purchase",
+			"item": [
+				{
+					"name": "Get All Purchases (Role=Administrador)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBlMDFjMjZlNDI1MDNkZTRjNmY2ODkiLCJ1bmlxdWVfbmFtZSI6ImFkbWluQGJvdGljYXJpby5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTU5NDgzMTI2MiwiZXhwIjoxNTk0ODM0ODYyLCJpYXQiOjE1OTQ4MzEyNjJ9.HAa3Y94u-VJlQsM1J5Aw0sLcvjQkYWcPe4kUGzJy3Ig",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/Purchase/GetAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Purchase",
+								"GetAll"
+							]
+						},
+						"description": "Obtem todos os pedidos"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Purchases (Role=Usuario))",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBmMmE3ZWM5MzI1NDMyNjAyOTY4NTYiLCJ1bmlxdWVfbmFtZSI6InVzZXJAYm90aWNhcmlvLmNvbSIsInJvbGUiOiJVc3VhcmlvIiwibmJmIjoxNTk0ODMwNTA3LCJleHAiOjE1OTQ4MzQxMDcsImlhdCI6MTU5NDgzMDUwN30.PprVvmtVMBg1dou8ihGGpdmWZtSuV5BNeCOOPK7p1sM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/Purchase",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Purchase"
+							]
+						},
+						"description": "Obtem os Pedidos do usuário logado"
+					},
+					"response": []
+				},
+				{
+					"name": "Get A Purchase (Role=Administrador/Usuario)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBmMmE3ZWM5MzI1NDMyNjAyOTY4NTYiLCJ1bmlxdWVfbmFtZSI6InVzZXJAYm90aWNhcmlvLmNvbSIsInJvbGUiOiJVc3VhcmlvIiwibmJmIjoxNTk0ODMwNTA3LCJleHAiOjE1OTQ4MzQxMDcsImlhdCI6MTU5NDgzMDUwN30.PprVvmtVMBg1dou8ihGGpdmWZtSuV5BNeCOOPK7p1sM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/Purchase/5f0f2ebe14aa033f3c141719",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Purchase",
+								"5f0f2ebe14aa033f3c141719"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Purchase (Role=Usuario)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBmMmE3ZWM5MzI1NDMyNjAyOTY4NTYiLCJ1bmlxdWVfbmFtZSI6InVzZXJAYm90aWNhcmlvLmNvbSIsInJvbGUiOiJVc3VhcmlvIiwibmJmIjoxNTk0ODMwNTA3LCJleHAiOjE1OTQ4MzQxMDcsImlhdCI6MTU5NDgzMDUwN30.PprVvmtVMBg1dou8ihGGpdmWZtSuV5BNeCOOPK7p1sM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Code\": \"d4s5a6d4\",\r\n    \"Cpf\": \"01234567895\",\r\n    \"Email\": \"user@boticario.com\",\r\n    \"value\": \"569.69\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/Purchase",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Purchase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update A Purchase (Role=Administrador/Usuario)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBmMmE3ZWM5MzI1NDMyNjAyOTY4NTYiLCJ1bmlxdWVfbmFtZSI6InVzZXJAYm90aWNhcmlvLmNvbSIsInJvbGUiOiJVc3VhcmlvIiwibmJmIjoxNTk0ODMxMTk4LCJleHAiOjE1OTQ4MzQ3OTgsImlhdCI6MTU5NDgzMTE5OH0.c57Y_1NNfoQc_JsbzkEx2WIqvskC9qBxXjLltLQHVOQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"email\": \"user@boticario.com\",\r\n        \"cpf\": \"01234567895\",\r\n        \"code\": \"d4s5a6d4\",\r\n        \"value\": 569.69,\r\n        \"status\": \"Approved\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/Purchase/5f0f2ebe14aa033f3c141719",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Purchase",
+								"5f0f2ebe14aa033f3c141719"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete A Purchase (Role=Administrador)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBlMDFjMjZlNDI1MDNkZTRjNmY2ODkiLCJ1bmlxdWVfbmFtZSI6ImFkbWluQGJvdGljYXJpby5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTU5NDgzMTI2MiwiZXhwIjoxNTk0ODM0ODYyLCJpYXQiOjE1OTQ4MzEyNjJ9.HAa3Y94u-VJlQsM1J5Aw0sLcvjQkYWcPe4kUGzJy3Ig",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/Purchase/5f0f2ebe14aa033f3c141719",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"Purchase",
+								"5f0f2ebe14aa033f3c141719"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create First User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InVzdWFyaW9AZWNvbGV0YS5jb20iLCJTdG9yZSI6IlVzdWFyaW8iLCJuYmYiOjE1OTQ2NzE1MDAsImV4cCI6MTU5NDY3NTEwMCwiaWF0IjoxNTk0NjcxNTAwfQ.TmxUnYFZ04JvqXFrSPWXgpGDdXf0XZyWQBNX0eXUfTc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Dimas\",\r\n    \"Cpf\": \"05617258966\",\r\n    \"Email\": \"Admin@boticario.com\",\r\n    \"password\": \"password\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/User/CreateFirstUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"User",
+								"CreateFirstUser"
+							]
+						},
+						"description": "Criará um usuário Administrador caso não exista nenhum usuário cadastrado na base."
+					},
+					"response": []
+				},
+				{
+					"name": "Create New User (Role=Administrador)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBlMDFjMjZlNDI1MDNkZTRjNmY2ODkiLCJ1bmlxdWVfbmFtZSI6ImFkbWluQGJvdGljYXJpby5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTU5NDgyOTM1NywiZXhwIjoxNTk0ODMyOTU3LCJpYXQiOjE1OTQ4MjkzNTd9.BF51Ow4EoiL8tNQPOjXxuYZQNbg238NopU96nF0kiUE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Dimas\",\r\n    \"Cpf\": \"01234567895\",\r\n    \"Email\": \"user@boticario.com\",\r\n    \"password\": \"password\",\r\n    \"Role\": \"Usuario\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/User",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"User"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users (Role=Administrador)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBlMDFjMjZlNDI1MDNkZTRjNmY2ODkiLCJ1bmlxdWVfbmFtZSI6ImFkbWluQGJvdGljYXJpby5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTU5NDgyOTM1NywiZXhwIjoxNTk0ODMyOTU3LCJpYXQiOjE1OTQ4MjkzNTd9.BF51Ow4EoiL8tNQPOjXxuYZQNbg238NopU96nF0kiUE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/User",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"User"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A User (Role=Administrador/Usuario)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBlMDFjMjZlNDI1MDNkZTRjNmY2ODkiLCJ1bmlxdWVfbmFtZSI6ImFkbWluQGJvdGljYXJpby5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTU5NDgyOTM1NywiZXhwIjoxNTk0ODMyOTU3LCJpYXQiOjE1OTQ4MjkzNTd9.BF51Ow4EoiL8tNQPOjXxuYZQNbg238NopU96nF0kiUE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/User/5f0e01c26e42503de4c6f689",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"User",
+								"5f0e01c26e42503de4c6f689"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Cashback",
+			"item": [
+				{
+					"name": "API Externa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "ZXPURQOARHiMc6Y0flhRC1LVlZQVFRnm",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf=01234567895",
+							"protocol": "https",
+							"host": [
+								"mdaqk8ek5j",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"v1",
+								"cashback"
+							],
+							"query": [
+								{
+									"key": "cpf",
+									"value": "01234567895"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Accumulated Cashback (Role=Usuario))",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBmMmE3ZWM5MzI1NDMyNjAyOTY4NTYiLCJ1bmlxdWVfbmFtZSI6InVzZXJAYm90aWNhcmlvLmNvbSIsInJvbGUiOiJVc3VhcmlvIiwibmJmIjoxNTk0ODMxMzcwLCJleHAiOjE1OTQ4MzQ5NzAsImlhdCI6MTU5NDgzMTM3MH0.DNh1G0lpY1wJn6MvCZXLOG3KASpS6IyHkXSNTL-bAJA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/User/GetMyAccumulatedCashback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"User",
+								"GetMyAccumulatedCashback"
+							]
+						},
+						"description": "Obtem o cashback acumulado do usuario logado"
+					},
+					"response": []
+				},
+				{
+					"name": "Get  Accumulated Cashback By CPF (Role=Administrador)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZjBkMTdkNTE2MDllZTMzNTQwNzgzZDciLCJ1bmlxdWVfbmFtZSI6ImFkbWluQGJvdGljYXJpby5jb20iLCJyb2xlIjoiQWRtaW5pc3RyYWRvciIsIm5iZiI6MTU5NDcwNzEzNiwiZXhwIjoxNTk0NzEwNzM2LCJpYXQiOjE1OTQ3MDcxMzZ9.4br8ILABo163f_3CUX9zHdmMF1Y4eQc0wcDEDsVIGXM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/User/GetAccumulatedCashback?cpf=05617258966",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"User",
+								"GetAccumulatedCashback"
+							],
+							"query": [
+								{
+									"key": "cpf",
+									"value": "05617258966"
+								}
+							]
+						},
+						"description": "(Administrador)Obtem o cash back acumulado do CPF passado como parametro "
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0eb5123d-6260-4cb7-862b-0df6a3ceeec8",
+						"exec": [
+							"tests[\"should have response\"] = responseBody !== \"\";\r",
+							"if(tests[\"should have response\"]){\r",
+							"    var response = JSON.parse(responseBody);\r",
+							"\r",
+							"    pm.environment.set(\"token\", response.access_token);\r",
+							"    pm.environment.set(\"currentToken\", response.access_token);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"user@boticario.com\",\r\n    \"Password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

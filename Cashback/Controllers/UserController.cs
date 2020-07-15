@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using Microsoft.EntityFrameworkCore.Internal;
+using Cashback.Models.ViewModel;
 
 namespace Cashback.Controllers
 {
@@ -30,12 +31,12 @@ namespace Cashback.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize("Administrador")]
-        public async Task<IActionResult> Get([FromServices] IUserRepository userRepository)
+        public async Task<IActionResult> GetAsync([FromServices] IUserRepository userRepository)
         {
             try
             {
                 var response = await userRepository.GetItemsAsync();
-
+                Console.WriteLine("To aqui");
                 if (!response.Any())
                 {
                     _logger.LogInformation($"Usuário não encontrado.");
@@ -62,6 +63,7 @@ namespace Cashback.Controllers
         {
             try
             {
+                Console.WriteLine("ID: " + id);
                 var user = await userRepository.GetById(id);
 
                 if (user == null)
@@ -70,8 +72,8 @@ namespace Cashback.Controllers
                     return NotFound();
                 }
                 _logger.LogInformation($"Usuário ({User?.Identity.Name}) efetuou uma busca pelo usuário com ID: {id}.");
-
-                return Ok(user);
+                
+                return Ok(new UserViewModel(user));
             }
             catch (Exception ex)
             {
