@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cashback.Data
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class MongoDbContext//<TEntity> : IRepository<TEntity, string> where TEntity : IEntityBase
     {
         #region [ Fields ]

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using System;
+using Cashback.Security;
 
 namespace Cashback.Service
 {
@@ -13,8 +14,6 @@ namespace Cashback.Service
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public IPurchaseRepository _purchaseRepository { get; }
-        public IUserRepository _userRepository { get; }
         private readonly ILogger _logger;
 
         public BoticarioService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<BoticarioService> logger)
@@ -28,7 +27,7 @@ namespace Cashback.Service
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{_configuration["ExternalServiceApi:host"]}v1/cashback?cpf={cpf}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{_configuration["ExternalServiceApi:host"]}v1/cashback?cpf={cpf.JustNumber()}");
                 request.Headers.Add("token", _configuration["ExternalServiceApi:token"]);
 
                 var client = _httpClientFactory.CreateClient("cashback");

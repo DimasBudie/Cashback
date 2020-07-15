@@ -10,6 +10,7 @@ using System.Reflection;
 
 namespace Cashback.Middlewares
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class ApiInjections
     {
         public static IServiceCollection InjectApiServices(this IServiceCollection services)

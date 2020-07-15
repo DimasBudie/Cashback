@@ -7,6 +7,7 @@ using Cashback.Security;
 
 namespace Cashback.Extensions
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class MvcExtensions
     {
         public static void AddAuthorizedMvc(this IServiceCollection services)

@@ -5,6 +5,7 @@ using System;
 
 namespace Cashback.Middlewares
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class MongoDbInjections
     {
         public static void InjectMongoDbConnection(this IServiceCollection services, IConfiguration configuration)

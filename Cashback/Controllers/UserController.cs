@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Cashback.Controllers
 {
@@ -35,7 +36,7 @@ namespace Cashback.Controllers
             {
                 var response = await userRepository.GetItemsAsync();
 
-                if (response == null)
+                if (!response.Any())
                 {
                     _logger.LogInformation($"Usuário não encontrado.");
                     return NotFound();
@@ -148,7 +149,7 @@ namespace Cashback.Controllers
         {
             try
             {
-                var userMail = User.Identity.Name;
+                var userMail = User?.Identity.Name;
                 var user = await userService.GetByEmail(userMail);
 
                 if (user != null)
@@ -175,7 +176,7 @@ namespace Cashback.Controllers
         [Authorize("Administrador")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAccumulatedCashback([FromServices] IUserService userService, [FromServices] IBoticarioService boticarioService, [FromQuery] string cpf)
+        public async Task<IActionResult> GetAccumulatedCashback([FromServices] IBoticarioService boticarioService, [FromQuery] string cpf)
         {
             try
             {

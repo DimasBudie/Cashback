@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Cashback.Security
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class HashStringExtensions
     {
         public static string ToHashPassword(this string phrase)

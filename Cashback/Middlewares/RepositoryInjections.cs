@@ -3,6 +3,7 @@ using Cashback.Repository;
 
 namespace Cashback.Middlewares
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class RepositoryInjections
     {
         public static void InjectRepository(this IServiceCollection services)

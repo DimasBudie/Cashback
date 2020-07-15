@@ -7,6 +7,7 @@ namespace Cashback.Data
 {
     public class ConventionPack
     {
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public class IdGeneratorConvention : ConventionBase, IPostProcessingConvention
         {
             public void PostProcess(BsonClassMap classMap)
@@ -19,6 +20,7 @@ namespace Cashback.Data
                     idMemberMap.SetIdGenerator(StringObjectIdGenerator.Instance);
             }
         }
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public static void UseConventionMongo()
         {
             var conventionPack = new MongoDB.Bson.Serialization.Conventions.ConventionPack { new CamelCaseElementNameConvention() };

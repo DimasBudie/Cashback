@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Cashback
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)

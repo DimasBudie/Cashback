@@ -15,7 +15,7 @@ namespace Cashback.Service
         public IUserRepository _userRepository { get; }
         private readonly ILogger _logger;
 
-        public PurchaseService(JwtConfigurations configurations, IUserRepository userRepository, IPurchaseRepository purchaseRepository, ILogger<PurchaseService> logger)
+        public PurchaseService(IUserRepository userRepository, IPurchaseRepository purchaseRepository, ILogger<PurchaseService> logger)
         {
             _purchaseRepository = purchaseRepository;
             _userRepository = userRepository;
@@ -29,7 +29,7 @@ namespace Cashback.Service
                 var loggedUser = await _userRepository.GetByEmail(email);
                 if (loggedUser != null)
                 {
-                    return await _purchaseRepository.GetByCpf(loggedUser.Cpf);
+                    return await _purchaseRepository.GetByCpf(loggedUser.Cpf.JustNumber());
                 }
             }
             catch (Exception ex)

@@ -30,13 +30,13 @@ namespace Cashback.Controllers
         [Authorize("Usuario")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<Purchase>>> GetAsync([FromServices] IPurchaseService purchaseService)
+        public async Task<IActionResult> GetAsync([FromServices] IPurchaseService purchaseService)
         {
             try
             {
-                var items = await purchaseService.GetPurchases(User.Identity.Name);
+                var items = await purchaseService.GetPurchases(User?.Identity.Name);
                 _logger.LogInformation($"Usuário ({User?.Identity.Name}) buscou pelos pedidos e obteve {items.Count()} resultados.");
-                return items.ToList();
+                return Ok(items.ToList());
             }
             catch (Exception ex)
             {
@@ -52,13 +52,13 @@ namespace Cashback.Controllers
         [Authorize("Administrador")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<Purchase>>> GetAll([FromServices] IPurchaseService purchaseService)
+        public async Task<IActionResult> GetAll([FromServices] IPurchaseService purchaseService)
         {
             try
             {
                 var items = await purchaseService.GetPurchases();
                 _logger.LogInformation($"Usuário ({User?.Identity.Name}) executou método GetAll.");
-                return items.ToList();
+                return Ok(items.ToList());
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace Cashback.Controllers
         [Authorize("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Purchase>> Get([FromServices] IPurchaseRepository purchaseRepository, string id)
+        public async Task<IActionResult> Get([FromServices] IPurchaseRepository purchaseRepository, string id)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Cashback.Controllers
                     return NotFound();
                 }
 
-                return purchase;
+                return Ok(purchase);                
             }
             catch (Exception ex)
             {
@@ -104,13 +104,13 @@ namespace Cashback.Controllers
         [Authorize("Usuario")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Purchase>> Create([FromServices] IPurchaseService purchaseService, Purchase purchase)
+        public async Task<IActionResult> Create([FromServices] IPurchaseService purchaseService, Purchase purchase)
         {
             try
             {
                 await purchaseService.CreatePurchase(purchase);
                 _logger.LogInformation($"Usuário {User?.Identity.Name} criou um pedido com código: {purchase.Code}.");
-                return purchase;
+                return Ok(purchase);
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace Cashback.Controllers
                     return BadRequest(response.GetProblemDetails(response));                    
                 }
                 _logger.LogInformation($"Usuário {User?.Identity.Name} atualizou o pedido com Id: {id}.");
-                return Created($"{ GetType().Name.Replace("Controller", "").ToLower()}/", response.Value);
+                return Ok(response);
             }
             catch (Exception ex)
             {

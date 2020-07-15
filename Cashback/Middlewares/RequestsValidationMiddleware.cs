@@ -10,7 +10,7 @@ namespace Cashback.Middlewares
     public abstract class Request<TResponse> : Notifiable, IRequest<TResponse>
     {
     }
-
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class Response
     {
         private List<Notification> _notifications { get; } = new List<Notification>();

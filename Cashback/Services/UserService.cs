@@ -27,9 +27,7 @@ namespace Cashback.Service
             {
                 var user = await _userRepository.GetByEmail(model.Email.ToLower());
 
-                if (user == null) return null;
-
-                if (!user.Password.VerifyHashPassword(model.Password))
+                if (user == null || !user.Password.VerifyHashPassword(model.Password)) 
                 {
                     _logger.LogInformation($"Falha na autenticação: Senha incorreta - Usuário: {model.Email}");
                     return null;
@@ -112,7 +110,8 @@ namespace Cashback.Service
                 }
 
                 user.Role = "Administrador";
-                return await CreateUser(user);
+                await _userRepository.InsertAsync(user);
+                response.AddValue(new UserViewModel(user));
             }
             catch (Exception ex)
             {
