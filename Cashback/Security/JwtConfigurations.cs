@@ -26,11 +26,11 @@ namespace Cashback.Security
                 throw new ArgumentNullException("Arquivo appsettings.json não encontrado!");
             }
 
-            if (configuration["JwtSettings:Issuer"] == null)
+             if (configuration["JwtSettings:SigningKey"] == null || configuration["JwtSettings:SigningKey"] == "")
             {
                  throw new ArgumentNullException("Configurações para o JWT não foram encontrados.\n\n Abra o arquivo appsettings.json " + 
                 "e adicione na seguinte estrutura: \n 'JwtSettings':' {\n   'Issuer':'---------',\n   'Audience':'---------',\n   " +
-                "'ValidForMinutes':'---------',\n   'RefreshTokenValidForMinutes':'---------',\n   'SigningKey': '------Nome da Database----'\n   }");
+                "'ValidForMinutes':'---------',\n   'RefreshTokenValidForMinutes':'---------',\n   'SigningKey': '----------'\n   }");
             }
 
             Issuer = configuration["JwtSettings:Issuer"];

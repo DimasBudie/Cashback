@@ -19,7 +19,7 @@ namespace Cashback.Middlewares
                 throw new ArgumentNullException("Arquivo appsettings.json não encontrado!");
             }
 
-            if(configuration["MongoStoreSettings:ConnectionString"] == null) {
+            if(configuration["MongoStoreSettings:ConnectionString"] == null || configuration["MongoStoreSettings:ConnectionString"] == "") {
                 throw new ArgumentNullException("Connection String do Banco de dados nao foi encontrado.\n\n Abra o arquivo appsettings.json " + 
                 "e adicione na seguinte estrutura: \n 'MongoStoreSettings':' {\n   'ConnectionString':'---------ConnectionString---------', \n   " +
                 "'DatabaseName': '------Nome da Database----'\n   }");
