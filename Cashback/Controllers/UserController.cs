@@ -36,7 +36,7 @@ namespace Cashback.Controllers
             try
             {
                 var response = await userRepository.GetItemsAsync();
-                if (!response.Any())
+                if (response == null || response.Count == 0)
                 {
                     _logger.LogInformation($"Usuário não encontrado.");
                     return NotFound();
