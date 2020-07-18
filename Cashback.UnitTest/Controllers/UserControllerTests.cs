@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Cashback.Controllers;
 using Cashback.Middlewares;
 using Cashback.Models;
+using Cashback.Models.ViewModel;
 using Cashback.Repository;
 using Cashback.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace Cashback.UnitTest.Controllers
         private UserController userController;
         private User user;
         private Response response;
+        private ChangePasswordViewmodel changePasswordViewmodel;
 
         [SetUp]
         public void Initialize()
@@ -35,6 +37,7 @@ namespace Cashback.UnitTest.Controllers
             userController = new UserController(logger.Object);
             user = new User { Cpf = "01234567895", Email = "teste@teste.com", Name = "Teste", Role = "Usuario", CreatedAt = new DateTimeOffset(), Id = "5f0e43f02f695b5ae0d8526e" };
             response = new Response();
+            changePasswordViewmodel = new ChangePasswordViewmodel { CurrentPassword = "password", NewPassword = "password", ConfirmNewPassword = "password"};
         }
 
         [Test()]
@@ -45,7 +48,7 @@ namespace Cashback.UnitTest.Controllers
             ICollection<User> userList = users;
             userRepository.Setup(t => t.GetItemsAsync()).Returns(Task.Run(() => userList));
 
-            var result = await userController.Get(userRepository.Object);
+            var result = await userController.GetAsync(userRepository.Object);
 
             Assert.That(result, Is.InstanceOf<IActionResult>());
             var ok = result;
@@ -59,7 +62,7 @@ namespace Cashback.UnitTest.Controllers
             ICollection<User> userList = users;
             userRepository.Setup(t => t.GetItemsAsync()).Returns(Task.Run(() => userList));
 
-            var result = await userController.Get(userRepository.Object);
+            var result = await userController.GetAsync(userRepository.Object);
 
             Assert.That(result, Is.InstanceOf<NotFoundResult>());
             var ok = result as NotFoundResult;
@@ -69,7 +72,7 @@ namespace Cashback.UnitTest.Controllers
         [Test()]
         public async Task GetUsersTest_Exception()
         {
-            var result = await userController.Get(null);
+            var result = await userController.GetAsync(null);
 
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
             var ok = result as BadRequestObjectResult;
@@ -243,23 +246,46 @@ namespace Cashback.UnitTest.Controllers
             var ok = result as BadRequestObjectResult;
             Assert.That(ok, Is.Not.Null);
         }
+
+        [Test()]
+        public async Task ChangePasswordTest()
+        {            
+            userService.Setup(t => t.GetByEmail(null)).Returns(Task.Run(() => user));
+            userService.Setup(t => t.ChangePassword(changePasswordViewmodel,null)).Returns(Task.Run(() => response));
+
+            var result = await userController.ChangePassword(userService.Object, changePasswordViewmodel);
+
+            Assert.That(result, Is.InstanceOf<OkResult>());
+            var ok = result as OkResult;
+            Assert.That(ok, Is.Not.Null);
+        }
+
+        [Test()]
+        public async Task ChangePasswordTest_Fail()
+        {
+            changePasswordViewmodel.NewPassword = "paSSword";
+            response.AddNotification("A nova senha e a confirmação da nova senha estão difetrentes!");
+            userService.Setup(t => t.GetByEmail(null)).Returns(Task.Run(() => user));
+            userService.Setup(t => t.ChangePassword(changePasswordViewmodel,null)).Returns(Task.Run(() => response));
+
+            var result = await userController.ChangePassword(userService.Object, changePasswordViewmodel);
+
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+            var ok = result as BadRequestObjectResult;
+            Assert.That(ok, Is.Not.Null);
+        }
+
+        [Test()]
+        public async Task ChangePasswordTest_Exceptionl()
+        {            
+            userService.Setup(t => t.GetByEmail("")).Returns(Task.Run(() => user));
+            userService.Setup(t => t.ChangePassword(changePasswordViewmodel,"")).Returns(Task.Run(() => response));
+
+            var result = await userController.ChangePassword(userService.Object, changePasswordViewmodel);
+
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+            var ok = result as BadRequestObjectResult;
+            Assert.That(ok, Is.Not.Null);
+        }
     }
 }
-
-
-/*
- *   public async Task<IActionResult> GetAccumulatedCashback([FromServices] IUserService userService, [FromServices] IBoticarioService boticarioService, [FromQuery] string cpf)
-        {
-            try
-            {
-                var cashback = await boticarioService.Cashback(cpf);
-                _logger.LogInformation($"o Usuário {User?.Identity.Name} realizou uma busca de cashback do usuario com o cpf: {cpf}.");
-                return Ok(cashback);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest(ex);
-            }
-        }
- */

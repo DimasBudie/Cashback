@@ -8,7 +8,7 @@ namespace Cashback.Repository
     {
         Task<Purchase> GetById(string id);
         Task<ICollection<Purchase>> GetItemsAsync();
-        Task<ICollection<Purchase>> GetByCpf(string Cpf);
+        Task<ICollection<Purchase>> GetByEmail(string email);
         Task<Purchase> InsertAsync(Purchase purchase);
         Task<Purchase> UpdateAsync(Purchase purchase);
         Task DeleteAsync(Purchase purchase);

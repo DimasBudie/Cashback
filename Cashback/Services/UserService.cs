@@ -120,5 +120,44 @@ namespace Cashback.Service
             }
             return response;
         }
+
+        public async Task<Response> ChangePassword(ChangePasswordViewmodel changePasswordViewmodel, string email)
+        {
+            var response = new Response();
+            try
+            {
+                var user = await _userRepository.GetByEmail(email);
+                if (user == null)
+                {
+                    _logger.LogInformation($"Usuário com e-mail: {user.Email} não encontrado!");
+                    response.AddNotification("Usuário não encontrado!");
+                    return response;
+                }
+                
+                if(!user.Password.VerifyHashPassword(changePasswordViewmodel.CurrentPassword))
+                {
+                    _logger.LogInformation($"Senha atual não corresponde com a informada!");
+                    response.AddNotification("Senha atual não corresponde com a informada!");
+                    return response;
+                }                
+                if(changePasswordViewmodel.NewPassword != changePasswordViewmodel.ConfirmNewPassword)
+                {
+                    _logger.LogInformation($"A nova senha e a confirmação da nova senha estão difetrentes!");
+                    response.AddNotification("A nova senha e a confirmação da nova senha estão difetrentes!");
+                    return response;
+                }
+
+                user.Password = changePasswordViewmodel.NewPassword.ToHashPassword();
+
+                await _userRepository.UpdateAsync(user);
+                response.AddValue(new UserViewModel(user));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                response.AddNotification(ex.Message);
+            }
+            return response;
+        }
     }
 }

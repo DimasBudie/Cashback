@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Cashback.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Cashback.Repository;
+using System;
 
 namespace Cashback.Controllers
 {
@@ -37,6 +39,6 @@ namespace Cashback.Controllers
             
             _logger.LogInformation($"Usuário com E-mail: {model.Email} logou na aplicação.");
             return Ok(response);
-        }            
+        }                 
     }
 }

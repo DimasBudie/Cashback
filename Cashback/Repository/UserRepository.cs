@@ -41,7 +41,6 @@ namespace Cashback.Repository
 
         public async Task<User> InsertAsync(User user)
         {
-            Console.WriteLine(user);
             user.Id = ObjectId.GenerateNewId().ToString();
             user.CreatedAt = DateTimeOffset.UtcNow;
 

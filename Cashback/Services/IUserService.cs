@@ -11,5 +11,6 @@ namespace Cashback.Service
          Task<User> GetByEmail(string email);
         Task<Response> CreateUser(User user);  
         Task<Response> CreateFirstUser(User user);
+        Task<Response> ChangePassword(ChangePasswordViewmodel changePasswordViewmodel, string email);
     }
 }

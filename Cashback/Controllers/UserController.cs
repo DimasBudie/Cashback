@@ -36,7 +36,6 @@ namespace Cashback.Controllers
             try
             {
                 var response = await userRepository.GetItemsAsync();
-                Console.WriteLine("To aqui");
                 if (!response.Any())
                 {
                     _logger.LogInformation($"Usuário não encontrado.");
@@ -63,7 +62,6 @@ namespace Cashback.Controllers
         {
             try
             {
-                Console.WriteLine("ID: " + id);
                 var user = await userRepository.GetById(id);
 
                 if (user == null)
@@ -72,8 +70,35 @@ namespace Cashback.Controllers
                     return NotFound();
                 }
                 _logger.LogInformation($"Usuário ({User?.Identity.Name}) efetuou uma busca pelo usuário com ID: {id}.");
-                
+
                 return Ok(new UserViewModel(user));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
+        }
+
+        /// <summary>
+        /// Retorna os dados do Usuario Logado.
+        /// </summary>
+        [HttpGet("me")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize("All")]
+        public async Task<IActionResult> GetMe([FromServices] IUserRepository userRepository)
+        {
+            try
+            {
+                var email = User?.Identity.Name;
+                if (string.IsNullOrEmpty(email))
+                {
+                    return BadRequest();
+                }
+                var response = await userRepository.GetByEmail(email);
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) está logado na aplicação.");
+                return Ok(new UserViewModel(response));
             }
             catch (Exception ex)
             {
@@ -110,6 +135,37 @@ namespace Cashback.Controllers
                 return BadRequest(ex);
             }
         }
+
+        /// <summary>
+        /// Altera a senha do usuário logado.
+        /// </summary>      
+        [HttpPost("ChangePassword")]
+        [Authorize("Usuario")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ChangePassword([FromServices] IUserService userService, [FromBody] ChangePasswordViewmodel changePasswordViewmodel)
+        {            
+            try
+            {
+                string email = User?.Identity.Name;
+                var response = await userService.ChangePassword(changePasswordViewmodel, email);
+
+                if (response.Invalid)
+                {
+                    var foundProblem = response.GetProblemDetails(response);
+                    _logger.LogWarning($"{foundProblem}");
+                    return BadRequest(foundProblem);
+                }
+                _logger.LogInformation($"Usuário ({User?.Identity.Name}) alterou a senha");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex);
+            }
+        }
+
 
         /// <summary>
         /// Cria um novo usuário (Administrador) caso ainda não tenha sido criado nenhum usuário - Acessível a todos os usuário.

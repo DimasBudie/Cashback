@@ -29,7 +29,7 @@ namespace Cashback.Service
                 var loggedUser = await _userRepository.GetByEmail(email);
                 if (loggedUser != null)
                 {
-                    return await _purchaseRepository.GetByCpf(loggedUser.Cpf.JustNumber());
+                    return await _purchaseRepository.GetByEmail(email);                    
                 }
             }
             catch (Exception ex)

@@ -48,7 +48,7 @@ namespace Cashback.UnitTest.Services
             purchases.Add(purchase);
             ICollection<Purchase> listPurchases = purchases;
             userRepository.Setup(t => t.GetByEmail("teste@teste.com")).Returns(Task.Run(() => user));
-            purchaseRepository.Setup(t => t.GetByCpf("01234567895")).Returns(Task.Run(() => listPurchases));
+            purchaseRepository.Setup(t => t.GetByEmail("teste@teste.com")).Returns(Task.Run(() => listPurchases));
 
             var result = await purchaseService.GetPurchases("teste@teste.com");
 

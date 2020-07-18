@@ -16,5 +16,12 @@ namespace Cashback.Models.ViewModel
         public string Cpf { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+    }
+
+    public class ChangePasswordViewmodel
+    {
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmNewPassword { get; set; }
     }    
 }

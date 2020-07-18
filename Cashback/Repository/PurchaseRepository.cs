@@ -27,15 +27,14 @@ namespace Cashback.Repository
             return await Context.GetByIdAsync<Purchase>(id);
         }
 
-        public async Task<ICollection<Purchase>> GetByCpf(string Cpf)
+        public async Task<ICollection<Purchase>> GetByEmail(string email)
         {
-            return await Context.GetItemsAsync(Builders<Purchase>.Filter.Eq(c => c.Cpf, Cpf));
+            return await Context.GetItemsAsync(Builders<Purchase>.Filter.Eq(c => c.Email, email));
         }
 
         public async Task<ICollection<Purchase>> GetItemsAsync()
         {
-            return await Context.GetItemsAsync(Builders<Purchase>.Filter.Empty, 
-                "Id", "CreatedAt", "Code", "Cpf", "Email", "Value", "Status");
+            return await Context.GetItemsAsync(Builders<Purchase>.Filter.Empty);
         }
 
         public async Task<Purchase> InsertAsync(Purchase purchase)
